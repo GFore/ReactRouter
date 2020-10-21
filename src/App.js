@@ -5,6 +5,8 @@ import {
   Route,
   Link,
   NavLink,
+  useRouteMatch,
+  useParams,
 } from "react-router-dom";
 
 export default function App() {
@@ -25,7 +27,7 @@ export default function App() {
                 About
               </NavLink>
             </li>
-            <li><Link to={{pathname: "/users"}}>Users</Link></li>
+            <li><Link to="/topics">Topics</Link></li>
           </ul>
         </nav>
 
@@ -36,7 +38,7 @@ export default function App() {
         */}
         <Switch>
           <Route path="/about"><About /></Route>
-          <Route path="/users"><Users /></Route>
+          <Route path="/topics"><Topics /></Route>
           <Route path="/"><Home /></Route>
         </Switch>
       </div>
@@ -46,4 +48,43 @@ export default function App() {
 
 const Home = () => (<h2>Home</h2>);
 const About = () => (<h2>About</h2>);
-const Users = () => (<h2>Users</h2>);
+const Topics = () => {
+  let match = useRouteMatch();
+  console.log('match >>> ', match);
+
+  return (
+    <div>
+      <h2>Topics</h2>
+
+      <ul>
+        <li>
+          <Link to={`${match.url}/components`}>Components</Link>
+        </li>
+        <li>
+          <Link to={`${match.url}/props-v-state`}>
+            Props v. State
+          </Link>
+        </li>
+      </ul>
+
+      {/* The Topics page has its own <Switch> with more routes
+          that build on the /topics URL path. You can think of the
+          2nd <Route> here as an "index" page for all topics, or
+          the page that is shown when no topic is selected */}
+      <Switch>
+        <Route path={`${match.path}/:topicId`}>
+          <Topic />
+        </Route>
+        <Route path={match.path}>
+          <h3>Please select a topic.</h3>
+        </Route>
+      </Switch>
+    </div>
+  );
+};
+
+function Topic() {
+  console.log('useParams() >>> ', useParams());
+  let { topicId } = useParams();
+  return <h3>Requested topic ID: {topicId}</h3>;
+}
