@@ -50,8 +50,6 @@ const Home = () => (<h2>Home</h2>);
 const About = () => (<h2>About</h2>);
 const Topics = () => {
   let match = useRouteMatch();
-  console.log('match >>> ', match);
-
   return (
     <div>
       <h2>Topics</h2>
@@ -83,8 +81,7 @@ const Topics = () => {
   );
 };
 
-function Topic() {
-  console.log('useParams() >>> ', useParams());
-  let { topicId } = useParams();
+const Topic = () => {
+  const { topicId } = useParams();
   return <h3>Requested topic ID: {topicId}</h3>;
 }
